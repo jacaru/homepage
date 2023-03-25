@@ -12,6 +12,7 @@ import ServicesGroup from "components/services/group";
 import BookmarksGroup from "components/bookmarks/group";
 import Widget from "components/widgets/widget";
 import Revalidate from "components/toggles/revalidate";
+import { fetcherWithBase, fetchWithBase } from "utils/fetcher";
 import createLogger from "utils/logger";
 import useWindowFocus from "utils/hooks/window-focus";
 import { getSettings } from "utils/config/config";
@@ -104,7 +105,7 @@ function Index({ initialSettings, fallback }) {
           setStale(true);
           localStorage.setItem("hash", hashData.hash);
 
-          fetch("/api/revalidate").then((res) => {
+          fetchWithBase("/api/revalidate").then((res) => {
             if (res.ok) {
               window.location.reload();
             }
@@ -147,7 +148,7 @@ function Index({ initialSettings, fallback }) {
   }
 
   return (
-    <SWRConfig value={{ fallback, fetcher: (resource, init) => fetch(resource, init).then((res) => res.json()) }}>
+    <SWRConfig value={{ fallback, fetcher: fetcherWithBase }}>
       <ErrorBoundary>
         <Home initialSettings={initialSettings} />
       </ErrorBoundary>

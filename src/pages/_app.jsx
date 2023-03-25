@@ -8,17 +8,14 @@ import "styles/theme.css";
 import "styles/manrope.css";
 import nextI18nextConfig from "../../next-i18next.config";
 
+import { fetcherWithBase } from "utils/fetcher";
 import { ColorProvider } from "utils/contexts/color";
 import { ThemeProvider } from "utils/contexts/theme";
 import { SettingsProvider } from "utils/contexts/settings";
 
 function MyApp({ Component, pageProps }) {
   return (
-    <SWRConfig
-      value={{
-        fetcher: (resource, init) => fetch(resource, init).then((res) => res.json()),
-      }}
-    >
+    <SWRConfig value={{ fetcher: fetcherWithBase }}>
       <Head>
         {/* https://nextjs.org/docs/messages/no-document-viewport-meta */}
         <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
