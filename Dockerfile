@@ -30,7 +30,7 @@ COPY . .
 SHELL ["/bin/ash", "-xeo", "pipefail", "-c"]
 RUN npm run telemetry \
  && mkdir config \
- && NEXT_PUBLIC_BUILDTIME=$BUILDTIME NEXT_PUBLIC_VERSION=$VERSION NEXT_PUBLIC_REVISION=$REVISION npm run build
+ && NEXT_PUBLIC_BASEPATH=/__BASEPATH__ NEXT_PUBLIC_BUILDTIME=$BUILDTIME NEXT_PUBLIC_VERSION=$VERSION NEXT_PUBLIC_REVISION=$REVISION npm run build
 
 # Production image, copy all the files and run next
 FROM docker.io/node:18-alpine AS runner
@@ -52,9 +52,9 @@ COPY --link --chown=1000:1000 /public ./public/
 # Copy files from builder
 COPY --link --from=builder --chown=1000:1000 /app/.next/standalone ./
 COPY --link --from=builder --chown=1000:1000 /app/.next/static/ ./.next/static/
-COPY --link --chmod=755 docker-entrypoint.sh /usr/local/bin/
+COPY --link --chmod=755 docker-entrypoint.sh set_basepath.sh /usr/local/bin/
 
-RUN apk add --no-cache su-exec
+RUN apk add --no-cache su-exec jq
 
 ENV PORT 3000
 EXPOSE $PORT
