@@ -1,5 +1,8 @@
-
 #!/bin/sh
+
+# From https://gist.github.com/u8sand/db56c9db4afc381c3716e9a60f96b638
+
+echo "Setting basepath..."
 
 # replace /__BASEPATH__ with the runtime-configured entrypoint
 if [ "$NEXT_PUBLIC_BASEPATH" = "" ]; then
@@ -22,3 +25,5 @@ find .next server.js \
     -e "s#/__BASEPATH__/#${NEXT_PUBLIC_BASEPATH}/#g" \
     -e "s#/__BASEPATH__#${NEXT_PUBLIC_BASEPATH}#g" \
     {} +
+
+echo "Done setting basepath"
